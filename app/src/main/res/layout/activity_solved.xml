@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:layout_margin="14dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/rose_vector"
+            android:layout_gravity="left|center"/>
+        <TextView
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Solved!"
+            android:textSize="70dp"
+            />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/rose_vector"
+            android:layout_gravity="right|center"/>
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="28sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="top|left" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textSize="28sp"
+            android:id="@+id/solved_time"
+            android:textColor="@android:color/white"
+            android:layout_gravity="top|right" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:textSize="28sp"
+            android:textColor="@android:color/white"
+            android:text="Best"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:textSize="28sp"
+            android:textColor="@android:color/white"
+            android:text="00:00:00"/>
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:textSize="21sp"
+            android:text="NEW GAME"
+            android:id="@+id/new_game_button_solved"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:textSize="21sp"
+            android:text="VIEW SOLUTION"
+            android:id="@+id/view_solution_button"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"/>
+    </LinearLayout>
+
+</LinearLayout>
+</ScrollView>

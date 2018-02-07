@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top|center_horizontal"
+    android:orientation="vertical"
+    android:padding="14dp"
+    >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:gravity="top|center_horizontal">
+        <Button
+            android:layout_gravity="left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:padding="7dp"
+            android:text="RESET"
+            android:id="@+id/reset_button"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"/>
+        <Button
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:padding="7dp"
+            android:text="NEW GAME"
+            android:id="@+id/new_game_button"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"/>
+
+        <Button
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:padding="7dp"
+            android:text="SOLVE"
+            android:id="@+id/solve_button"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"/>
+    </FrameLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="@android:color/white"
+        android:text="Are you sure? This action will reset your time."/>
+</LinearLayout>
+
+
+    <FrameLayout
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
+        android:layout_width="327dp"
+        android:layout_height="327dp"
+        android:id="@+id/puzzle_board">
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="150dp"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="top|left" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:id="@+id/timer"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="top|right" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|left"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:text="Best"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:text="00:00:00"/>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:textSize="21sp"
+            android:text="SUBMIT"
+            android:id="@+id/submit_button"
+            android:textColor="@android:color/white"
+            android:background="@android:color/black"/>
+    </LinearLayout>
+
+
+</LinearLayout>
+</ScrollView>
