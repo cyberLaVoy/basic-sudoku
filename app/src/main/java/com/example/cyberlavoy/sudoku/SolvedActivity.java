@@ -5,22 +5,18 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 public class SolvedActivity extends AppCompatActivity {
 
     private static final String EXTRA_SOLVED_TIME =
             "com.example.cyberlavoy.sudoku.solved_time";
-    private static final String EXTRA_NEW_GAME_BUTTON_PRESSED =
-            "com.example.cyberlavoy.sudoku.new_game_button_pressed";
 
     private String mSolvedTime;
     private TextView mSolvedTimeView;
-    private Button mViewSolutionButton;
-    private Button mNewGameButton;
+    private FrameLayout mBackButton;
+    private FrameLayout mMenuButton;
 
     public static Intent newIntent(Context packageContext, String solved_time) {
         Intent intent = new Intent(packageContext, SolvedActivity.class);
@@ -28,15 +24,6 @@ public class SolvedActivity extends AppCompatActivity {
         return intent;
     }
 
-    private void setNewGameButtonPressed(boolean new_game_button_pressed) {
-        Intent data = new Intent();
-        data.putExtra(EXTRA_NEW_GAME_BUTTON_PRESSED, new_game_button_pressed);
-        setResult(RESULT_OK, data);
-    }
-
-    public static boolean newGameButtonPressed(Intent result) {
-        return result.getBooleanExtra(EXTRA_NEW_GAME_BUTTON_PRESSED, false);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,25 +31,27 @@ public class SolvedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_solved);
 
         mSolvedTimeView = findViewById(R.id.solved_time);
-        mViewSolutionButton = findViewById(R.id.view_solution_button);
-        mNewGameButton = findViewById(R.id.new_game_button_solved);
+        mBackButton = findViewById(R.id.solved_view_back_button);
+        mMenuButton = findViewById(R.id.solved_view_menu_button);
 
         mSolvedTime = getIntent().getStringExtra(EXTRA_SOLVED_TIME);
         mSolvedTimeView.setText(mSolvedTime);
 
-        mViewSolutionButton.setOnClickListener(new View.OnClickListener() {
+        mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                finish();
             }
         });
-        mNewGameButton.setOnClickListener(new View.OnClickListener() {
+        mMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setNewGameButtonPressed(true);
+                Intent intent = MenuActivity.newIntent(SolvedActivity.this);
+                startActivity(intent);
                 finish();
             }
         });
+
     }
 
 }
