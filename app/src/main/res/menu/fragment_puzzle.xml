@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/puzzle_menu_button"
+        android:icon="@drawable/menu_icon"
+        android:title="Menu"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/puzzle_reset_button"
+        android:icon="@drawable/reset_icon"
+        android:title="Reset"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/puzzle_solve_button"
+        android:icon="@drawable/solve_icon"
+        android:title="Solve"
+        app:showAsAction="always"/>
+</menu>

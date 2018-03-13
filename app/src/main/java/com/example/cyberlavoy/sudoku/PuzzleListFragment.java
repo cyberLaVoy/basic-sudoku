@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -25,29 +28,17 @@ import java.util.UUID;
 public class PuzzleListFragment extends Fragment {
     private RecyclerView mPuzzleRecyclerView;
     private PuzzleAdapter mAdapter;
-    private FrameLayout mMenuButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_puzzle_list, container, false);
-
-        mMenuButton = view.findViewById(R.id.list_view_menu_button);
         mPuzzleRecyclerView = (RecyclerView) view.findViewById(R.id.puzzle_recycler_view);
         mPuzzleRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        mMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = MenuActivity.newIntent(getActivity());
-                startActivity(intent);
-            }
-        });
-
         updateUI();
-
         return view;
     }
+
 
     @Override
     public void onResume() {

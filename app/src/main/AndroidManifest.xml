@@ -15,9 +15,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PuzzleListActivity">
+        <activity android:name=".PuzzleListActivity"  android:parentActivityName=".MenuActivity">
         </activity>
-        <activity android:name=".PuzzleActivity">
+        <activity android:name=".PuzzleActivity" android:parentActivityName=".PuzzleListActivity">
         </activity>
         <activity android:name=".SolvedActivity">
         </activity>

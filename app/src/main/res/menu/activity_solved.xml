@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/solved_menu_button"
+        android:icon="@drawable/menu_icon"
+        android:title="Menu"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/solved_back_button"
+        android:icon="@drawable/ic_back_icon"
+        android:title="Back"
+        app:showAsAction="always"/>
+</menu>

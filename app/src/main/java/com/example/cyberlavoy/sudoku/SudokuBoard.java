@@ -83,9 +83,6 @@ public class SudokuBoard {
         }
         public boolean setBox(int outer_location, int inner_location, String value) {
                 mBoard[outer_location][inner_location] = value;
-                if (isValidEntry(outer_location, inner_location, value)) {
-                        return true;
-                }
                 return false;
         }
         public boolean isSolved() {
@@ -97,13 +94,17 @@ public class SudokuBoard {
                                 }
                         }
                 }
+                if (isSolved) {
+                        mWasSolved = true;
+                }
                 return isSolved;
         }
         public boolean isValidEntry(int outer_location, int inner_location, String value) {
                 value = value.substring(0,1);
                 boolean isValid;
                 for (int i = 0; i < mSize; i++) {
-                        if (value.equals(mBoard[outer_location][i].substring(0,1)) && i != inner_location) {
+                        String compare = mBoard[outer_location][i].substring(0,1);
+                        if (value.equals(compare) && i != inner_location) {
                                 return false;
                         }
                 }
@@ -140,7 +141,8 @@ public class SudokuBoard {
                 }
                 for (int i = outer_iterator; i < outer_iterator+3; i++) {
                         for (int j = inner_iterator; j < inner_iterator+3; j++) {
-                                if (value.equals(mBoard[i][j].substring(0,1)) && j != inner_location && i != outer_location) {
+                                String compare = mBoard[i][j].substring(0,1);
+                                if (value.equals(compare) && !(j == inner_location && i == outer_location)) {
                                         return false;
                                 }
                         }
@@ -149,10 +151,11 @@ public class SudokuBoard {
         }
         public boolean isValidEntryVertical(int outer_location, int inner_location, String value) {
                 int outer_iterator = outer_location % 3;
-                int inner_iterator = inner_location % 3;
                 for (int i = outer_iterator; i <= outer_iterator+6; i+=3) {
+                       int inner_iterator = inner_location % 3;
                        for (int j = inner_iterator; j <= inner_iterator+6; j+=3) {
-                               if (value.equals(mBoard[i][j].substring(0,1)) && j != inner_location && j != outer_location) {
+                               String compare = mBoard[i][j].substring(0,1);
+                               if (value.equals(compare) && !(j == inner_location && i == outer_location)) {
                                        return false;
                                }
                        }

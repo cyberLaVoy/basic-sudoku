@@ -14,13 +14,15 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,23 +41,21 @@ public class PuzzleFragment extends Fragment {
 
     private final int[] mSelectionButtonRefs = {R.id.button1, R.id.button2, R.id.button3,
                                                 R.id.button4, R.id.button5, R.id.button6,
-                                                R.id.button7, R.id.button8, R.id.button9,};
+                                                R.id.button7, R.id.button8, R.id.button9, R.id.button10};
+    private ConstraintLayout mPuzzleScreen;
+    private int mPuzzleScreenWidth;
     private FrameLayout mPuzzleBoard;
     private SudokuBoard mSudokuBoard;
     private Button mSubmitButton;
-    private ImageView mSolveButton;
-    private ImageView mResetButton;
-    private ImageView mMenuButton;
     private EditText mPuzzleTitle;
-    private String mSolvedTime;
-    private TextView mTimer;
     private int[] mFocusedCellPosition;
     private TextView mFocusedCellView;
-    private int mContainerWidth;
 
-    private int time_elapsed;
-    private Timer timer = new Timer();
-    private boolean timer_is_running = false;
+    private static String mSolvedTime;
+    private static TextView mTimer;
+    private static int time_elapsed;
+    private static Timer timer = new Timer();
+    private static boolean timer_is_running = false;
 
 
     public static PuzzleFragment newInstance(UUID puzzleId) {
@@ -70,6 +70,7 @@ public class PuzzleFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         UUID puzzleId = (UUID) getArguments().getSerializable(ARG_PUZZLE_ID);
         mSudokuBoard = PuzzleBook.get(getActivity()).getSudokuBoard(puzzleId);
@@ -82,20 +83,52 @@ public class PuzzleFragment extends Fragment {
         super.onPause();
         mSudokuBoard.setSecondsPlayed(time_elapsed);
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_puzzle, menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.puzzle_reset_button:
+                mSudokuBoard.clearBoard();
+                mPuzzleBoard.removeAllViews();
+                createSudokuBoardView();
+                return true;
+            case R.id.puzzle_solve_button:
+                if (!mSudokuBoard.wasSolved()) {
+                    timer.cancel();
+                    timer_is_running = false;
+                    clearTime();
+                    timer = new Timer();
+                }
+                mSudokuBoard.testSolve();
+                mPuzzleBoard.removeAllViews();
+                createSudokuBoardView();
+                return true;
+            case R.id.puzzle_menu_button:
+                Intent intent = MenuActivity.newIntent(getActivity());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_puzzle, container, false);
 
-        DisplayMetrics displayMetrics = v.getResources().getDisplayMetrics();
-        mContainerWidth =  displayMetrics.widthPixels;
+        mPuzzleScreen = v.findViewById(R.id.puzzle_screen);
+        DisplayMetrics displayMetrics = mPuzzleScreen.getResources().getDisplayMetrics();
+        mPuzzleScreenWidth =  displayMetrics.widthPixels;
 
         mPuzzleBoard = v.findViewById(R.id.puzzle_board);
         mSubmitButton = v.findViewById(R.id.submit_button);
-        mSolveButton = v.findViewById(R.id.solve_button);
-        mResetButton = v.findViewById(R.id.reset_button);
-        mMenuButton = v.findViewById(R.id.puzzle_view_menu_button);
         mPuzzleTitle = v.findViewById(R.id.puzzle_title);
         mTimer = v.findViewById(R.id.timer);
 
@@ -104,16 +137,14 @@ public class PuzzleFragment extends Fragment {
 
         mPuzzleTitle.setText(mSudokuBoard.getTitle());
 
-        if (! timer_is_running) {
+        if (! timer_is_running && !mSudokuBoard.wasSolved()) {
             startTimer();
         }
-
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isSolved = mSudokuBoard.isSolved();
-               if (isSolved) {
+               if (mSudokuBoard.isSolved()) {
                    Intent intent = SolvedActivity.newIntent(getActivity(), mSolvedTime);
                    startActivity(intent);
                    timer.cancel();
@@ -124,34 +155,6 @@ public class PuzzleFragment extends Fragment {
                    Toast toast = new Toast(getActivity());
                    toast.makeText(getActivity(), "Not quite.", Toast.LENGTH_SHORT).show();
                }
-            }
-        });
-        mSolveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                timer.cancel();
-                timer_is_running = false;
-                clearTime();
-                timer = new Timer();
-                mSudokuBoard.testSolve();
-                mPuzzleBoard.removeAllViews();
-                createSudokuBoardView();
-            }
-        });
-        mResetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSudokuBoard.clearBoard();
-                mPuzzleBoard.removeAllViews();
-                createSudokuBoardView();
-            }
-        });
-        mMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = MenuActivity.newIntent(getActivity());
-                startActivity(intent);
-                getActivity().finish();
             }
         });
         mPuzzleTitle.addTextChangedListener(new TextWatcher() {
@@ -175,34 +178,40 @@ public class PuzzleFragment extends Fragment {
             }
         });
 
-
-
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 10; i++) {
             Button selectionButton = v.findViewById(mSelectionButtonRefs[i]);
-            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) selectionButton.getLayoutParams();
-            params.width = mContainerWidth/9 - 5;
-            selectionButton.setLayoutParams(params);
-
             selectionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    char suffix;
                     mPuzzleTitle.setCursorVisible(false);
-                    Button button = (Button) view;
-                    String value = (String) button.getText();
-                    mFocusedCellView.setText(value);
-                    int x = mFocusedCellPosition[0];
-                    int y = mFocusedCellPosition[1];
-                    if (!mSudokuBoard.isValidEntry(x, y, value)) {
-                        mFocusedCellView.setTextColor(Color.parseColor("#dd0000"));
+                    if (mFocusedCellView != null) {
+                        Button button = (Button) view;
+                        String value = (String) button.getText();
+                        if (value.equals("X")) {
+                            mFocusedCellView.setText("");
+                            int x = mFocusedCellPosition[0];
+                            int y = mFocusedCellPosition[1];
+                            mSudokuBoard.setBox(x, y, "0n");
+                        }
+                        else {
+                            mFocusedCellView.setText(value);
+                            int x = mFocusedCellPosition[0];
+                            int y = mFocusedCellPosition[1];
+                            if (mSudokuBoard.isValidEntry(x, y, value)) {
+                                suffix = 'p';
+                                mFocusedCellView.setTextColor(Color.parseColor("#FF9100"));
+
+                            } else {
+                                suffix = 'e';
+                                mFocusedCellView.setTextColor(Color.parseColor("#DD0000"));
+                            }
+                            mSudokuBoard.setBox(x, y, value + suffix);
+                        }
                     }
-                    else {
-                        mFocusedCellView.setTextColor(Color.parseColor("#000000"));
-                    }
-                    mSudokuBoard.setBox(x,y,value + 'p');
                 }
             });
         }
-
         return v;
     }
 
@@ -211,8 +220,7 @@ public class PuzzleFragment extends Fragment {
          for(int i = 0; i <= 8; i++) {
             Drawable outer_border = getResources().getDrawable(R.drawable.outer_border);
             FrameLayout frame_layout = new FrameLayout(getActivity());
-            float d = getActivity().getResources().getDisplayMetrics().density;
-            FrameLayout.LayoutParams frame_parameters = new FrameLayout.LayoutParams((int)(109*d), (int)(109*d));
+            FrameLayout.LayoutParams frame_parameters = new FrameLayout.LayoutParams((int)(mPuzzleScreenWidth/3), (int)(mPuzzleScreenWidth/3));
             int first_gravity = Gravity.TOP;
             int second_gravity = Gravity.LEFT;
             if ( i >= 3 && i <= 5) {
@@ -254,7 +262,6 @@ public class PuzzleFragment extends Fragment {
                     TextView text_view = new TextView(getActivity());
                     text_view.setTag(boxLocation);
                     if (value.charAt(1) != 's') {
-                        text_view.setTextColor(Color.parseColor("#000000"));
                         text_view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -271,12 +278,16 @@ public class PuzzleFragment extends Fragment {
                     if (value.charAt(1) != 'n') {
                         text_view.setText(value.substring(0, 1));
                     }
-
-
+                    if (value.charAt(1) == 'p') {
+                        text_view.setTextColor(Color.parseColor("#FF9100"));
+                    }
+                    if (value.charAt(1) == 'e') {
+                        text_view.setTextColor(Color.parseColor("#DD0000"));
+                    }
                     text_view.setTextSize(getResources().getDimension(R.dimen.textSize));
                     text_view.setGravity(Gravity.CENTER);
                     text_view.setBackground(innerBorder);
-                    ViewGroup.LayoutParams  params = new ViewGroup.LayoutParams((int)(35*d), (int)(35*d));
+                    ViewGroup.LayoutParams  params = new ViewGroup.LayoutParams((int)(((mPuzzleScreenWidth/3)-3)/3), (int)(((mPuzzleScreenWidth/3)-3)/3));
                     text_view.setLayoutParams(params);
                     linear_layout.addView(text_view);
 
@@ -285,8 +296,13 @@ public class PuzzleFragment extends Fragment {
         }
     }
 
+    private static Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            mTimer.setText( formatTime(time_elapsed) );
+        }
+    };
 
-    private void startTimer() {
+    private static void startTimer() {
         timer_is_running = true;
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -296,14 +312,8 @@ public class PuzzleFragment extends Fragment {
         }, 0, 1000);
     }
 
-    public Handler handler = new Handler() {
-        public void handleMessage(Message msg) {
-            mTimer.setText( formatTime(time_elapsed) );
-        }
-    };
-
-    String formatTime(int time_in_seconds) {
-       String formatted = new String();
+    private static String formatTime(int time_in_seconds) {
+       String formatted;
        int hours = time_in_seconds/3600;
        int minutes = time_in_seconds/60;
        int seconds = time_in_seconds%60;
@@ -324,11 +334,10 @@ public class PuzzleFragment extends Fragment {
        return formatted;
     }
 
-    void clearTime() {
+    private static void clearTime() {
         time_elapsed = -1;
         mSolvedTime = "00:00:00";
         mTimer.setText("00:00:00");
     }
-
 
 }
