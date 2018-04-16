@@ -4,81 +4,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:layout_editor_absoluteY="81dp">
+    android:layout_height="88dp"
+    tools:layout_editor_absoluteY="81dp"
+    android:background="@color/colorPrimary"
+    >
 
 
     <ImageView
-        android:id="@+id/rose_icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/puzzle_thumbnail"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/rose_vector" />
 
-    <TextView
-        android:id="@+id/puzzle_title"
-        android:layout_width="0dp"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Puzzle #17"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toStartOf="@+id/status_icon"
-        app:layout_constraintStart_toEndOf="@+id/rose_icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/puzzle_thumbnail"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/date_created"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:text="Created: mm/dd/yy hh:mm a.m."
-        app:layout_constraintEnd_toStartOf="@+id/status_icon"
-        app:layout_constraintStart_toEndOf="@+id/rose_icon"
-        app:layout_constraintTop_toBottomOf="@+id/puzzle_title" />
+        <TextView
+            android:id="@+id/puzzle_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Puzzle #17"
+            android:textColor="@android:color/white"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            app:layout_constraintBottom_toTopOf="@+id/date_created"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/last_played"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:text="Last Played: mm/dd/yy hh:mm p.m."
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintEnd_toStartOf="@+id/status_icon"
-        app:layout_constraintStart_toEndOf="@+id/rose_icon"
-        app:layout_constraintTop_toBottomOf="@+id/date_created" />
+        <TextView
+            android:id="@+id/date_created"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Created: mm/dd/yy hh:mm a.m."
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/puzzle_title" />
+
+        <TextView
+            android:id="@+id/last_played"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Last Played: mm/dd/yy hh:mm p.m."
+            android:textColor="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@+id/date_created" />
+    </android.support.constraint.ConstraintLayout>
 
     <ImageView
         android:id="@+id/status_icon"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/ic_not_complete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/in_progress_icon"
-        />
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/black"
+        android:background="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/last_played" />
+        />
 </android.support.constraint.ConstraintLayout>
 

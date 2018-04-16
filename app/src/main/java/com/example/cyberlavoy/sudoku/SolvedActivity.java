@@ -30,7 +30,12 @@ public class SolvedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_solved);
         mSolvedTimeView = findViewById(R.id.solved_time);
         mSolvedTime = getIntent().getStringExtra(EXTRA_SOLVED_TIME);
-        mSolvedTimeView.setText(mSolvedTime);
+        if (mSolvedTime != null) {
+            mSolvedTimeView.setText(mSolvedTime);
+        }
+        else {
+            mSolvedTimeView.setText("00:00:00");
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

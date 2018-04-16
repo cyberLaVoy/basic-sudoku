@@ -1,25 +1,29 @@
 package com.example.cyberlavoy.sudoku;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static com.example.cyberlavoy.sudoku.database.DbBitmapUtility.getBytes;
 
 /**
  * Created by CyberLaVoy on 2/25/2018.
@@ -39,7 +43,6 @@ public class PuzzleListFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -53,6 +56,7 @@ public class PuzzleListFragment extends Fragment {
             mPuzzleRecyclerView.setAdapter(mAdapter);
         }
         else {
+            mAdapter.setPuzzles(sudoduPuzzles);
             mAdapter.notifyDataSetChanged();
         }
     }
@@ -63,9 +67,10 @@ public class PuzzleListFragment extends Fragment {
         private TextView mLastPlayed;
         private TextView mPuzzleTitle;
         private ImageView mStatusImageView;
+        private ImageView mPuzzleThumbnail;
 
-        private Drawable solvedIcon = getResources().getDrawable(R.drawable.solved_icon);
-        private Drawable inProgressIcon = getResources().getDrawable(R.drawable.in_progress_icon);
+        private Drawable solvedIcon = getResources().getDrawable(R.drawable.ic_complete);
+        private Drawable inProgressIcon = getResources().getDrawable(R.drawable.ic_not_complete);
 
         public PuzzleHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_puzzle, parent, false));
@@ -73,6 +78,7 @@ public class PuzzleListFragment extends Fragment {
             mLastPlayed = (TextView) itemView.findViewById(R.id.last_played);
             mPuzzleTitle = (TextView) itemView.findViewById(R.id.puzzle_title);
             mStatusImageView = (ImageView) itemView.findViewById(R.id.status_icon);
+            mPuzzleThumbnail = (ImageView) itemView.findViewById(R.id.puzzle_thumbnail);
             itemView.setOnClickListener(this);
         }
         public void bind(SudokuBoard sudokuBoard) {
@@ -90,6 +96,12 @@ public class PuzzleListFragment extends Fragment {
             lastPlayed += sudokuBoard.getLastPlayed();
             mDateCreated.setText(dateCreated);
             mLastPlayed.setText(lastPlayed);
+            Bitmap thumbnail = mSudokuBoard.getThumbnail();
+            if (thumbnail != null) {
+                mPuzzleThumbnail.setImageBitmap(thumbnail);
+                mPuzzleThumbnail.setRotation(90);
+                mPuzzleThumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
         }
         @Override
         public void onClick(View view) {
@@ -106,7 +118,8 @@ public class PuzzleListFragment extends Fragment {
 
         public PuzzleAdapter(Map<UUID, SudokuBoard> sudokuPuzzles) {
             mSudokuPuzzles = sudokuPuzzles;
-            mPuzzleBookKeys = new ArrayList<UUID>( mSudokuPuzzles.keySet() );
+            mPuzzleBookKeys = new ArrayList<>( mSudokuPuzzles.keySet() );
+            Collections.reverse(mPuzzleBookKeys);
         }
         @Override
         public PuzzleHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -124,6 +137,12 @@ public class PuzzleListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mSudokuPuzzles.size();
+        }
+
+        public void setPuzzles(Map<UUID, SudokuBoard> puzzles) {
+            mSudokuPuzzles = puzzles;
+            mPuzzleBookKeys = new ArrayList<>( mSudokuPuzzles.keySet() );
+            Collections.reverse(mPuzzleBookKeys);
         }
     }
 }

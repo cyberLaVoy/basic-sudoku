@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.cyberlavoy.sudoku">
 
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false"
+        />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/rose_vector"
@@ -21,6 +28,16 @@
         </activity>
         <activity android:name=".SolvedActivity">
         </activity>
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="com.example.cyberlavoy.sudoku.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/files"/>
+    </provider>
+
     </application>
 
 </manifest>

@@ -1,8 +1,15 @@
 package com.example.cyberlavoy.sudoku;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
+import static com.example.cyberlavoy.sudoku.database.DbBitmapUtility.getBytes;
 
 public class SudokuBoard {
 
@@ -14,18 +21,21 @@ public class SudokuBoard {
         private String mLastPlayed;
         private int mSecondsPlayed;
         private int mSize = 9;
+        private Bitmap mThumbnail;
 
-        SudokuBoard() {
+        public SudokuBoard() {this(UUID.randomUUID());}
+        public SudokuBoard(UUID id) {
+                mId = id;
                 mBoard = new String[mSize][mSize];
                 for (int i = 0; i <=8 ; i++) {
                         for (int j = 0; j <=8 ; j++) {
                             mBoard[i][j] = "0n";
                         }
                 }
+                mTitle = "Sudoku Board";
                 mSecondsPlayed = 0;
                 mWasSolved = false;
-                mId = UUID.randomUUID();
-                String pattern = "MM-dd-yy hh:mm:ss a";
+                String pattern = "M-dd-yy h:mm a";
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
                 mDateCreated = simpleDateFormat.format(new Date());
                 mLastPlayed = simpleDateFormat.format(new Date());
@@ -35,36 +45,71 @@ public class SudokuBoard {
             for (int i = 0; i <=8 ; i++) {
                 for (int j = 0; j <=8 ; j++) {
                     if (mBoard[i][j].charAt(1) != 's') {
-                            mBoard[i][j] = "0n";
+                        mBoard[i][j] = "0n";
                     }
                 }
             }
         }
+        public void setBoardLayout(String layout) {
+             int stringIndex = 0;
+             for (int i = 0; i <=8 ; i++) {
+                for (int j = 0; j <=8 ; j++) {
+                    String cell = layout.substring(stringIndex, stringIndex+2);
+                    mBoard[i][j] = cell;
+                    stringIndex+=2;
+                }
+            }
+        }
+        public String getBoardLayout() {
+             String boardLayout = "";
+             for (int i = 0; i <=8 ; i++) {
+                for (int j = 0; j <=8 ; j++) {
+                    boardLayout = boardLayout.concat(mBoard[i][j]);
+                }
+             }
+             return boardLayout;
+        }
+
+        public void setThumbnail(Context context) {
+            File photoFile = PuzzleBook.get(context.getApplicationContext()).getPhotoFile(this);
+            Bitmap bitmap = null;
+            if (photoFile != null && photoFile.exists()) {
+                bitmap = PictureUtils.getScaledBitmap(photoFile.getPath(), 100, 100);
+            }
+            mThumbnail = bitmap;
+        }
+        public void setThumbnail(Bitmap bitmap) { mThumbnail = bitmap; }
+        public Bitmap getThumbnail() {return mThumbnail;}
 
         public UUID getId() {
                 return mId;
         }
+
         public String getDateCreated() {
                 return mDateCreated;
         }
-            public String getTitle() {
+        public void setDateCreated(String date) { mDateCreated = date; }
+
+
+        public String getTitle() {
         return mTitle;
         }
-
         public void setTitle(String title) {
             mTitle = title;
         }
 
+        public boolean wasSolved() { return mWasSolved; }
+        public void setSolved(boolean solved) { mWasSolved = solved; }
+
         public String getLastPlayed() {
                 return mLastPlayed;
         }
-        public boolean wasSolved() { return mWasSolved; }
-
         public void setLastPlayed() {
-            String pattern = "MM-dd-yy hh:mm:ss a";
+            String pattern = "M-dd-yy h:mm a";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             mLastPlayed = simpleDateFormat.format(new Date());
         }
+        public void setLastPlayed(String date) { mLastPlayed = date; }
 
         public int getSecondsPlayed() {
                 return mSecondsPlayed;
@@ -72,6 +117,12 @@ public class SudokuBoard {
         public void setSecondsPlayed(int secondsPlayed) {
                 mSecondsPlayed = secondsPlayed;
         }
+
+//File operations
+        public String getPhotoFilename() {
+                return "IMG_" + getId().toString() + ".jpg";
+        }
+
 
         public String getBox(int outer_location, int inner_location) {
                 if (outer_location < mSize && inner_location < mSize) {
@@ -162,7 +213,6 @@ public class SudokuBoard {
                 }
                 return true;
         }
-
 
         public void makeTestBoard() {
                 setBox(0,0,"2s");

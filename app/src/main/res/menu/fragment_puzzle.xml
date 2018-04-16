@@ -3,17 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/puzzle_menu_button"
-        android:icon="@drawable/menu_icon"
+        android:icon="@drawable/ic_menu_icon"
         android:title="Menu"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/puzzle_reset_button"
-        android:icon="@drawable/reset_icon"
-        android:title="Reset"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/puzzle_solve_button"
-        android:icon="@drawable/solve_icon"
+        android:icon="@drawable/ic_solve_icon"
         android:title="Solve"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/puzzle_reset_button"
+        android:icon="@drawable/ic_reset_icon"
+        android:title="Reset"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/puzzle_delete_button"
+        android:icon="@drawable/ic_delete_icon"
+        android:title="Delete"
+        app:showAsAction="ifRoom"/>
 </menu>

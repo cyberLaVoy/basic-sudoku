@@ -3,13 +3,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pink"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
  <android.support.v7.widget.RecyclerView
     android:id="@+id/puzzle_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+     android:paddingTop="8dp"
     />
 
 </LinearLayout>
